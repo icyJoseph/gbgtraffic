@@ -68,7 +68,21 @@ const getToken = key => {
 // middleware
 const jsonParser = bodyParser.json();
 app.use(jsonParser);
+app.use((req, res, next) => {
+  const { webtaskContext } = req;
+  const { meta } = webtaskContext;
+  const allowedURIs =
+    meta.ENV === "DEV" ? "http://localhost:3000" : "https://wiry-coal.surge.sh";
 
+  const accessControlAllowOrigin = ["Access-Control-Allow-Origin", allowedURIs];
+  const accessControlAllowHeaders = [
+    "Access-Control-Allow-Headers",
+    "Content-Type"
+  ];
+  res.setHeader(...accessControlAllowOrigin);
+  res.setHeader(...accessControlAllowHeaders);
+  next();
+});
 //endpoints
 app.get("/token", (req, res) => {
   const { webtaskContext } = req;
