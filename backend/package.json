@@ -1,0 +1,20 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon --exec \"wt serve backend.js --hostname localhost --port 1337 --secrets-file .secrets\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "qs": "^6.5.2",
+    "uuid": "^3.3.2",
+    "webtask-tools": "^3.4.0"
+  }
+}
