@@ -73,7 +73,7 @@ export const getNearbyAddress = (token, originCoordLat, originCoordLong) => {
     });
 };
 
-// Get stop in the nearby location by address
+// Get stop in the nearby location by an input query
 export const searchStops = (token, input) => {
   return axios
     .get(`${trafficPublicEndPoint}/location.name`, {
