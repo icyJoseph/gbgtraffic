@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import Routes from "./routes";
 import "./index.css";
-import App from "./App";
 import configureStore from "./ducks/config";
 import { register } from "./serviceWorker";
 
@@ -11,7 +11,7 @@ const store = configureStore(storedState ? JSON.parse(storedState) : undefined);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Routes />
   </Provider>,
   document.getElementById("root")
 );
