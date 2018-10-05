@@ -11,6 +11,7 @@ export const fetchToken = () => {
 
 export const selectState = state => state.auth;
 export const selectToken = state => selectState(state).access_token;
+export const selectId = state => selectState(state).id;
 export const selectExpiry = state => selectState(state).expiry;
 export const selectFailed = state => selectState(state).failed;
 
