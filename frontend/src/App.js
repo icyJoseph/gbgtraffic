@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
+import { connect } from "react-redux";
+import { fetchToken } from "./ducks/auth";
 
 class App extends Component {
+  componentDidMount() {
+    this.props.fetchToken();
+  }
   render() {
     return (
       <div className="App">
@@ -23,4 +28,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(
+  undefined,
+  { fetchToken }
+)(App);

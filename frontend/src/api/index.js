@@ -1,10 +1,5 @@
 import axios from "axios";
 
-export const backEnd =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_BACKEND
-    : "http://localhost:1337";
-
 export const trafficPublicEndPoint =
   "https://api.vasttrafik.se/bin/rest.exe/v2";
 
