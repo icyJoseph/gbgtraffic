@@ -1,6 +1,12 @@
 import axios from "axios";
 
-export const apiEndPoint = "http://localhost:1337";
+export const backEnd =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_BACKEND
+    : "http://localhost:1337";
+
+export const trafficPublicEndPoint =
+  "https://api.vasttrafik.se/bin/rest.exe/v2";
 
 // Generate oAuth2 headers
 const headers = token => {
@@ -15,7 +21,7 @@ const format = "json";
 // Get System Info
 export const getSystemInfo = token => {
   return axios
-    .get(`${apiEndPoint}/systeminfo`, {
+    .get(`${trafficPublicEndPoint}/systeminfo`, {
       headers: headers(token),
       params: {
         format
@@ -37,7 +43,7 @@ export const getSystemInfo = token => {
 // Get stop in the nearby location by lat lng
 export const getNearbyStops = (token, originCoordLat, originCoordLong) => {
   return axios
-    .get(`${apiEndPoint}/location.nearbystops`, {
+    .get(`${trafficPublicEndPoint}/location.nearbystops`, {
       headers: headers(token),
       params: { format, originCoordLat, originCoordLong }
     })
@@ -56,7 +62,7 @@ export const getNearbyStops = (token, originCoordLat, originCoordLong) => {
 // Get stop in the nearby location by address
 export const getNearbyAddress = (token, originCoordLat, originCoordLong) => {
   return axios
-    .get(`${apiEndPoint}/location.nearbyaddress`, {
+    .get(`${trafficPublicEndPoint}/location.nearbyaddress`, {
       headers: headers(token),
       params: { format, originCoordLat, originCoordLong }
     })
@@ -75,7 +81,7 @@ export const getNearbyAddress = (token, originCoordLat, originCoordLong) => {
 // Get stop in the nearby location by address
 export const searchStops = (token, input) => {
   return axios
-    .get(`${apiEndPoint}/location.name`, {
+    .get(`${trafficPublicEndPoint}/location.name`, {
       headers: headers(token),
       params: { format, input }
     })
@@ -103,7 +109,7 @@ export const getDepartureBoard = (token, id, date, time) => {
     excludeDR: 0
   };
   return axios
-    .get(`${apiEndPoint}/departureBoard`, {
+    .get(`${trafficPublicEndPoint}/departureBoard`, {
       headers: headers(token),
       params: { format, id, date, time, ...defaults }
     })
@@ -122,7 +128,7 @@ export const getArrivalBoard = (token, id, date, time) => {
     excludeDR: 0
   };
   return axios
-    .get(`${apiEndPoint}/arrivalBoard`, {
+    .get(`${trafficPublicEndPoint}/arrivalBoard`, {
       headers: headers(token),
       params: { format, id, date, time, ...defaults }
     })
@@ -134,7 +140,7 @@ export const getArrivalBoard = (token, id, date, time) => {
  */
 export const getGeometry = (token, ref) => {
   return axios
-    .get(`${apiEndPoint}/geometry`, {
+    .get(`${trafficPublicEndPoint}/geometry`, {
       headers: headers(token),
       params: { format }
     })
@@ -146,7 +152,7 @@ export const getGeometry = (token, ref) => {
  */
 export const getJourneyDetail = (token, ref) => {
   return axios
-    .get(`${apiEndPoint}/journeyDetail`, {
+    .get(`${trafficPublicEndPoint}/journeyDetail`, {
       headers: headers(token),
       params: { format }
     })
@@ -167,7 +173,7 @@ export const getTrips = (token, config) => {
     excludeDR: 0
   };
   return axios
-    .get(`${apiEndPoint}/trip`, {
+    .get(`${trafficPublicEndPoint}/trip`, {
       headers: headers(token),
       params: { format, ...config, ...defaults }
     })
