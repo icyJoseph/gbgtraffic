@@ -2,18 +2,31 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createSelector } from "../../functional";
 import { fetchToken, selectId } from "../../ducks/auth";
+import { getPermissionStatus, selectCoords } from "../../ducks/geoLocation";
 
 export class Landing extends Component {
   componentDidMount() {
     this.props.fetchToken();
+    this.props.getPermissionStatus();
   }
   render() {
-    console.log(this.props);
-    return <div>You are: {this.props.id}</div>;
+    return (
+      <div>
+        <div>You are: {this.props.id}</div>
+        <div>
+          and your location is:{" "}
+          {`${this.props.lat ? `${this.props.lat} ${this.props.lng}` : ""}`}
+        </div>
+      </div>
+    );
   }
 }
 
 export default connect(
-  createSelector([selectId], id => ({ id })),
-  { fetchToken }
+  createSelector([selectId, selectCoords], (id, { lat, lng }) => ({
+    id,
+    lat,
+    lng
+  })),
+  { fetchToken, getPermissionStatus }
 )(Landing);
