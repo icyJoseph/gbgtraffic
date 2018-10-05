@@ -59,7 +59,7 @@ const getToken = key => {
     .then(res => {
       return {
         id,
-        expiry: new Date().getTime() + 60 * 60 * 1000,
+        expiry: new Date().getTime() + res.data.expires_in * 1000,
         ...res.data
       };
     });
