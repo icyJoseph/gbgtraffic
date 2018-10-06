@@ -1,6 +1,6 @@
 {
-  "short_name": "BussApp",
-  "name": "Buss App",
+  "short_name": "BusApp",
+  "name": "Bus App",
   "icons": [
     {
       "src": "bus-app-512x512.png",
