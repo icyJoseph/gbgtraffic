@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createSelector } from "../../functional";
 import { fetchToken, selectId } from "../../ducks/auth";
-import { getPermissionStatus, selectCoords } from "../../ducks/geoLocation";
+import {
+  getPermissionStatus,
+  selectCoords,
+  getMapToken
+} from "../../ducks/geoLocation";
 
 export class Landing extends Component {
   componentDidMount() {
     this.props.fetchToken();
     this.props.getPermissionStatus();
+    this.props.getMapToken();
   }
   render() {
     return (
@@ -28,5 +33,5 @@ export default connect(
     lat,
     lng
   })),
-  { fetchToken, getPermissionStatus }
+  { fetchToken, getPermissionStatus, getMapToken }
 )(Landing);

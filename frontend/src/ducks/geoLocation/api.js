@@ -1,5 +1,5 @@
 import axios from "axios";
-import { byLatLng, byAddress } from "../config/endpoints";
+import { mapToken, byLatLng, byAddress } from "../config/endpoints";
 
 export const checkPermission = () => {
   return new Promise((resolve, reject) => {
@@ -38,4 +38,10 @@ export const getByLatLng = coords => {
 
 export const getByAdress = address => {
   return axios.post(byAddress, { address }).then(({ data }) => data);
+};
+
+export const getMapToken = () => {
+  return axios
+    .get(mapToken, { headers: { "Content-Type": "application/json" } })
+    .then(({ data }) => ({ ...data }));
 };
