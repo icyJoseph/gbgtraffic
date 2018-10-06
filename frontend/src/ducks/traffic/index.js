@@ -23,9 +23,12 @@ export const selectNearbyStopsFetchingStatus = state =>
 export const selectDepartureBoard = state => selectState(state).Departure;
 export const selectArrivalBoard = state => selectState(state).Arrival;
 
+export const selectServerTime = state => selectState(state).servertime;
+export const selectServerDate = state => selectState(state).serverdate;
+
 export default function reducer(
   traffic = {
-    serverDate: null,
+    serverdate: null,
     servertime: null,
     nearbyStopLocations: [],
     fetchingNearbyStops: false,
