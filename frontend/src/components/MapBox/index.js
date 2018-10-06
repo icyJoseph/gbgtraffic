@@ -11,16 +11,24 @@ class MapBox extends Component {
       zoom: 13
     });
 
-    this.map.dragPan.disable();
+    this.map.scrollZoom.disable();
 
     this.marker = new mapboxgl.Marker()
       .setLngLat([this.props.lng, this.props.lat])
       .addTo(this.map);
+
+    this.allMarkers = this.props.nearby.map(({ id, lat, lon }) => {
+      const el = document.createElement("div");
+      el.setAttribute("id", id);
+      return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(this.map);
+    });
+    this.props.callback();
   }
 
   componentWillUnmount() {
     this.map.remove();
     this.marker.remove();
+    this.allMarkers.remove();
   }
 
   render() {
