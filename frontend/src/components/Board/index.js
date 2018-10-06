@@ -7,7 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-
+import { TableContainer } from "./styled";
 class Board extends Component {
   state = {
     value: 0
@@ -48,7 +48,7 @@ class Board extends Component {
           <Tab label="Departure" />
           <Tab label="Arrivals" />
         </Tabs>
-        <div style={{ overflowX: "scroll", width: "100%" }}>
+        <TableContainer>
           <Table padding="dense">
             <TableHead>
               <TableRow>
@@ -89,7 +89,7 @@ class Board extends Component {
               </TableBody>
             )}
           </Table>
-        </div>
+        </TableContainer>
       </Fragment>
     );
   }
