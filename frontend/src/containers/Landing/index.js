@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import Paper from "@material-ui/core/Paper";
 import Marker from "../../components/Marker";
 import { createSelector } from "../../functional";
-import { fetchToken, selectId } from "../../ducks/auth";
-import { selectZoom } from "../../ducks/map";
+import { fetchToken } from "../../ducks/auth";
+import {
+  selectZoom,
+  selectStopCard,
+  openStopCard,
+  closeStopCard
+} from "../../ducks/map";
 import {
   getPermissionStatus,
   getMapToken,
@@ -13,8 +18,8 @@ import {
   selectMapTokenExpiry
 } from "../../ducks/geoLocation";
 import { selectNearbyStopLocations } from "../../ducks/traffic";
-
 import MapBox from "../../components/MapBox";
+
 export class Landing extends Component {
   state = {
     loadMarkers: false
@@ -30,13 +35,6 @@ export class Landing extends Component {
     const mapTokenExpired = new Date().getTime() > this.props.map_token_expiry;
     return (
       <div>
-        <div style={{ background: "white" }}>
-          <div>You are: {this.props.id}</div>
-          <div>
-            and your location is:{" "}
-            {`${this.props.lat ? `${this.props.lat} ${this.props.lng}` : ""}`}
-          </div>
-        </div>
         {!mapTokenExpired && (
           <MapBox
             token={this.props.map_token}
@@ -48,31 +46,64 @@ export class Landing extends Component {
           />
         )}
         {this.state.loadMarkers &&
-          this.props.nearby.map(stop => <Marker key={stop.id} {...stop} />)}
+          this.props.nearby.map(stop => (
+            <Marker
+              key={stop.id}
+              {...stop}
+              callback={this.props.openStopCard}
+            />
+          ))}
+        {this.props.stopCardOpen && (
+          <div style={{ position: "absolute", width: "100%", bottom: "100px" }}>
+            <Paper
+              elevation={3}
+              style={{
+                width: "80%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                margin: "0 auto"
+              }}
+            >
+              <div>DepartureBoard</div>
+              <button onClick={this.props.closeStopCard}>close</button>
+            </Paper>
+          </div>
+        )}
       </div>
     );
   }
 }
 
+const mapStateToProps = createSelector(
+  [
+    selectCoords,
+    selectMapToken,
+    selectMapTokenExpiry,
+    selectNearbyStopLocations,
+    selectZoom,
+    selectStopCard
+  ],
+  ({ lat, lng }, map_token, map_token_expiry, nearby, zoom, stopCardOpen) => ({
+    lat,
+    lng,
+    map_token,
+    map_token_expiry,
+    nearby,
+    zoom,
+    stopCardOpen
+  })
+);
+
+const mapDispatchToProps = {
+  fetchToken,
+  getPermissionStatus,
+  getMapToken,
+  openStopCard,
+  closeStopCard
+};
+
 export default connect(
-  createSelector(
-    [
-      selectId,
-      selectCoords,
-      selectMapToken,
-      selectMapTokenExpiry,
-      selectNearbyStopLocations,
-      selectZoom
-    ],
-    (id, { lat, lng }, map_token, map_token_expiry, nearby, zoom) => ({
-      id,
-      lat,
-      lng,
-      map_token,
-      map_token_expiry,
-      nearby,
-      zoom
-    })
-  ),
-  { fetchToken, getPermissionStatus, getMapToken }
+  mapStateToProps,
+  mapDispatchToProps
 )(Landing);
