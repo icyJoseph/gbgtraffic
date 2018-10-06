@@ -15,7 +15,7 @@ export const Pixel = ({ red, green, blue }) => (
   />
 );
 
-export const Avatar = ({ id }) => {
+export const Avatar = ({ id = "" }) => {
   const joint = id.split("-").join("");
   const rawData = pipe(
     split,
