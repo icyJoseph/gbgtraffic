@@ -17,7 +17,7 @@ export const selectFailed = state => selectState(state).failed;
 
 export default function reducer(
   auth = {
-    id: null,
+    id: undefined,
     scope: null,
     token_type: null,
     expires_in: null,
