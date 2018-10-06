@@ -9,6 +9,9 @@ const app = express();
 
 const tokenEndPoint = "https://api.vasttrafik.se/token";
 
+const makeMapBoxUrl = key =>
+  `https://api.mapbox.com/tokens/v2/icjoseph?access_token=${key}`;
+
 const makeGeoURL = (key, encodedAddress) =>
   `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&location=${encodedAddress}`;
 
@@ -113,6 +116,30 @@ app.post("/address", (req, res) => {
   const encodedAddress = encodeURIComponent(address);
   const geoURL = makeGeoURL(GEOLOCATION_KEY, encodedAddress);
   return getGeoLocation(geoURL, res);
+});
+
+app.get("/mapToken", (req, res) => {
+  const { webtaskContext } = req;
+  const {
+    secrets: { MAP_BOX_KEY }
+  } = webtaskContext;
+  const url = makeMapBoxUrl(MAP_BOX_KEY);
+  const expires = new Date().getTime() + 60 * 60 * 1000;
+  const scopes = ["styles:read", "fonts:read", "datasets:read"];
+  return axios
+    .post(
+      url,
+      { expires, scopes },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+    .then(({ data }) => res.status(200).send({ ...data, expires }))
+    .catch(() => {
+      res.status(401).send({ error: "Map token error" });
+    });
 });
 
 module.exports = Webtask.fromExpress(app);
