@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import Marker from "../../components/Marker";
+import Board from "../../components/Board";
 import { createSelector } from "../../functional";
 import { fetchToken } from "../../ducks/auth";
 import {
   selectZoom,
-  selectStopCard,
+  selectStopCardState,
+  selectStopId,
   openStopCard,
   closeStopCard
 } from "../../ducks/map";
@@ -17,7 +20,13 @@ import {
   selectMapToken,
   selectMapTokenExpiry
 } from "../../ducks/geoLocation";
-import { selectNearbyStopLocations } from "../../ducks/traffic";
+import {
+  selectNearbyStopsFetchingStatus,
+  selectNearbyStopLocations,
+  selectDepartureBoard,
+  selectArrivalBoard,
+  fetchBoard
+} from "../../ducks/traffic";
 import MapBox from "../../components/MapBox";
 
 export class Landing extends Component {
@@ -43,6 +52,7 @@ export class Landing extends Component {
             nearby={this.props.nearby}
             zoom={this.props.zoom}
             callback={this.toggleLoadMarkers}
+            fetching={this.props.fetching}
           />
         )}
         {this.state.loadMarkers &&
@@ -53,20 +63,36 @@ export class Landing extends Component {
               callback={this.props.openStopCard}
             />
           ))}
-        {this.props.stopCardOpen && (
-          <div style={{ position: "absolute", width: "100%", bottom: "100px" }}>
+        {this.props.stopCardState && (
+          <div
+            style={{
+              position: "absolute",
+              width: "100%",
+              bottom: "50px",
+              zIndex: 10
+            }}
+          >
             <Paper
               elevation={3}
               style={{
-                width: "80%",
+                width: "75%",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                margin: "0 auto"
+                margin: "0 auto",
+                padding: "10px",
+                height: "250px"
               }}
             >
-              <div>DepartureBoard</div>
-              <button onClick={this.props.closeStopCard}>close</button>
+              <Board
+                current={this.props.currentStopId}
+                nearby={this.props.nearby}
+                departures={this.props.departures}
+                arrivals={this.props.arrivals}
+                fetch={this.props.fetchBoard}
+                close={this.props.closeStopCard}
+              />
+              <Button onClick={this.props.closeStopCard}>close</Button>
             </Paper>
           </div>
         )}
@@ -82,16 +108,35 @@ const mapStateToProps = createSelector(
     selectMapTokenExpiry,
     selectNearbyStopLocations,
     selectZoom,
-    selectStopCard
+    selectStopCardState,
+    selectStopId,
+    selectNearbyStopsFetchingStatus,
+    selectDepartureBoard,
+    selectArrivalBoard
   ],
-  ({ lat, lng }, map_token, map_token_expiry, nearby, zoom, stopCardOpen) => ({
+  (
+    { lat, lng },
+    map_token,
+    map_token_expiry,
+    nearby,
+    zoom,
+    stopCardState,
+    currentStopId,
+    fetching,
+    departures,
+    arrivals
+  ) => ({
     lat,
     lng,
     map_token,
     map_token_expiry,
     nearby,
     zoom,
-    stopCardOpen
+    stopCardState,
+    currentStopId,
+    fetching,
+    departures,
+    arrivals
   })
 );
 
@@ -100,7 +145,8 @@ const mapDispatchToProps = {
   getPermissionStatus,
   getMapToken,
   openStopCard,
-  closeStopCard
+  closeStopCard,
+  fetchBoard
 };
 
 export default connect(
