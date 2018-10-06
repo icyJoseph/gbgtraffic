@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Marker from "../../components/Marker";
 import { createSelector } from "../../functional";
 import { fetchToken, selectId } from "../../ducks/auth";
+import { selectZoom } from "../../ducks/map";
 import {
   getPermissionStatus,
   getMapToken,
@@ -42,6 +43,7 @@ export class Landing extends Component {
             lat={this.props.lat}
             lng={this.props.lng}
             nearby={this.props.nearby}
+            zoom={this.props.zoom}
             callback={this.toggleLoadMarkers}
           />
         )}
@@ -59,15 +61,17 @@ export default connect(
       selectCoords,
       selectMapToken,
       selectMapTokenExpiry,
-      selectNearbyStopLocations
+      selectNearbyStopLocations,
+      selectZoom
     ],
-    (id, { lat, lng }, map_token, map_token_expiry, nearby) => ({
+    (id, { lat, lng }, map_token, map_token_expiry, nearby, zoom) => ({
       id,
       lat,
       lng,
       map_token,
       map_token_expiry,
-      nearby
+      nearby,
+      zoom
     })
   ),
   { fetchToken, getPermissionStatus, getMapToken }

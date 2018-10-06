@@ -1,35 +1,48 @@
 import React from "react";
 import { connect } from "react-redux";
 import MyLocation from "@material-ui/icons/MyLocation";
-import NavigateBefore from "@material-ui/icons/NavigateBefore";
-import Search from "@material-ui/icons/Search";
+import LocationOn from "@material-ui/icons/LocationOn";
+import ZoomIn from "@material-ui/icons/ZoomIn";
+import ZoomOut from "@material-ui/icons/ZoomOut";
 
 import { getCurrentPosition } from "../../ducks/geoLocation";
 import { fetchNearbyStops } from "../../ducks/traffic";
+import { zoomIn, zoomOut } from "../../ducks/map";
 
 import { StyledButton } from "../../components/styled/Buttons";
 import { Pinned } from "../../components/styled/Pinned";
-import { curry } from "../../functional";
 
-const goBack = history => history.push("/");
-
-export const Bottom = ({ history, getPos, getStopsNearby }) => (
+export const Bottom = ({
+  increaseZoom,
+  decreaseZoom,
+  getPos,
+  getStopsNearby
+}) => (
   <Pinned>
     <StyledButton
       variant="fab"
       color="primary"
       aria-label="back"
-      onClick={curry(goBack)(history)}
+      onClick={decreaseZoom}
     >
-      <NavigateBefore fontSize="large" />
+      <ZoomOut fontSize="large" />
     </StyledButton>
+    <StyledButton
+      variant="fab"
+      color="primary"
+      aria-label="back"
+      onClick={increaseZoom}
+    >
+      <ZoomIn fontSize="large" />
+    </StyledButton>
+
     <StyledButton
       variant="fab"
       color="primary"
       aria-label="search"
       onClick={getStopsNearby}
     >
-      <Search fontSize="large" />
+      <MyLocation fontSize="large" />
     </StyledButton>
     <StyledButton
       variant="fab"
@@ -37,12 +50,17 @@ export const Bottom = ({ history, getPos, getStopsNearby }) => (
       aria-label="search"
       onClick={getPos}
     >
-      <MyLocation fontSize="large" />
+      <LocationOn fontSize="large" />
     </StyledButton>
   </Pinned>
 );
 
 export default connect(
   undefined,
-  { getPos: getCurrentPosition, getStopsNearby: fetchNearbyStops }
+  {
+    getPos: getCurrentPosition,
+    getStopsNearby: fetchNearbyStops,
+    increaseZoom: zoomIn,
+    decreaseZoom: zoomOut
+  }
 )(Bottom);

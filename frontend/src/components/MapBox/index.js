@@ -4,11 +4,12 @@ import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 class MapBox extends Component {
   componentDidMount() {
     mapboxgl.accessToken = this.props.token;
+    const zoom = this.props.zoom;
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v9",
       center: [this.props.lng, this.props.lat],
-      zoom: 13
+      zoom
     });
 
     this.map.scrollZoom.disable();
@@ -25,6 +26,14 @@ class MapBox extends Component {
     this.props.callback();
   }
 
+  componentDidUpdate(prevProps) {
+    return prevProps.zoom !== this.props.zoom
+      ? this.zoomTo(this.props.zoom)
+      : null;
+  }
+
+  zoomTo = zoom => this.map.zoomTo(zoom, { duration: 1000 });
+
   componentWillUnmount() {
     this.map.remove();
     this.marker.remove();
@@ -40,7 +49,13 @@ class MapBox extends Component {
       zIndex: -10
     };
 
-    return <div style={style} ref={el => (this.mapContainer = el)} />;
+    return (
+      <div
+        style={style}
+        ref={el => (this.mapContainer = el)}
+        onClick={this.zoomTo}
+      />
+    );
   }
 }
 
