@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import MyLocation from "@material-ui/icons/MyLocation";
+import DirectionsBus from "@material-ui/icons/DirectionsBus";
 import LocationOn from "@material-ui/icons/LocationOn";
 import ZoomIn from "@material-ui/icons/ZoomIn";
 import ZoomOut from "@material-ui/icons/ZoomOut";
@@ -42,7 +42,7 @@ export const Bottom = ({
       aria-label="search"
       onClick={getStopsNearby}
     >
-      <MyLocation fontSize="large" />
+      <DirectionsBus fontSize="large" />
     </StyledButton>
     <StyledButton
       variant="fab"
