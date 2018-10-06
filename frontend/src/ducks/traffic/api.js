@@ -1,4 +1,5 @@
 import axios from "axios";
+import { dateAndTime } from "../../functional";
 
 export const trafficPublicEndPoint =
   "https://api.vasttrafik.se/bin/rest.exe/v2";
@@ -12,6 +13,12 @@ const headers = token => {
 
 // This app is built to work with json
 const format = "json";
+const defaults = {
+  useVas: 0,
+  useLDTrain: 0,
+  useRegTrain: 0,
+  excludeDR: 0
+};
 
 // Get System Info
 export const getSystemInfo = token => {
@@ -96,38 +103,41 @@ export const searchStops = (token, input) => {
  * @param date YYYY-MM-DD
  * @param time is in HH:MM
  */
-export const getDepartureBoard = (token, id, date, time) => {
-  const defaults = {
-    useVas: 0,
-    useLDTrain: 0,
-    useRegTrain: 0,
-    excludeDR: 0
-  };
+export const getDepartureBoard = (token, id) => {
+  const { date, time } = dateAndTime();
+
   return axios
     .get(`${trafficPublicEndPoint}/departureBoard`, {
       headers: headers(token),
       params: { format, id, date, time, ...defaults }
     })
-    .then(res => res.data);
+    .then(
+      ({
+        data: {
+          DepartureBoard: { noNamespaceSchemaLocation: omit, ...rest }
+        }
+      }) => ({ ...rest })
+    );
 };
 
 /** Get arrivalBoard
  * @param date YYYY-MM-DD
  * @param time is in HH:MM
  */
-export const getArrivalBoard = (token, id, date, time) => {
-  const defaults = {
-    useVas: 0,
-    useLDTrain: 0,
-    useRegTrain: 0,
-    excludeDR: 0
-  };
+export const getArrivalBoard = (token, id) => {
+  const { date, time } = dateAndTime();
   return axios
     .get(`${trafficPublicEndPoint}/arrivalBoard`, {
       headers: headers(token),
       params: { format, id, date, time, ...defaults }
     })
-    .then(res => res.data);
+    .then(
+      ({
+        data: {
+          ArrivalBoard: { noNamespaceSchemaLocation: omit, ...rest }
+        }
+      }) => ({ ...rest })
+    );
 };
 
 /** Get geometry
@@ -161,12 +171,6 @@ export const getJourneyDetail = (token, ref) => {
  * optionals viaId, date, time, searchForArrival,
  */
 export const getTrips = (token, config) => {
-  const defaults = {
-    useVas: 0,
-    useLDTrain: 0,
-    useRegTrain: 0,
-    excludeDR: 0
-  };
   return axios
     .get(`${trafficPublicEndPoint}/trip`, {
       headers: headers(token),
