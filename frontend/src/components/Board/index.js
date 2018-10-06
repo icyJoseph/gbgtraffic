@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 
 class Board extends Component {
   state = {
@@ -30,8 +31,12 @@ class Board extends Component {
     if (!stop) {
       return this.props.close() && null;
     }
+    const { track } = stop;
     return (
       <Fragment>
+        <Typography variant="title" gutterBottom>
+          Track {track} - {stop.name}
+        </Typography>
         <Tabs
           position="sticky"
           value={this.state.value}
@@ -47,11 +52,8 @@ class Board extends Component {
           <Table padding="dense">
             <TableHead>
               <TableRow>
-                <TableCell>{stop.name}</TableCell>
+                <TableCell>Line</TableCell>
                 <TableCell>Time</TableCell>
-                <TableCell padding="none" numeric>
-                  Track
-                </TableCell>
                 <TableCell>
                   {this.state.value === 0 ? "Direction" : "Origin"}
                 </TableCell>
@@ -59,33 +61,31 @@ class Board extends Component {
             </TableHead>
             {this.state.value === 0 ? (
               <TableBody>
-                {this.props.departures.map(departure => {
-                  return (
-                    <TableRow key={departure.journeyid}>
-                      <TableCell>{departure.name}</TableCell>
-                      <TableCell>{departure.time}</TableCell>
-                      <TableCell padding="none" numeric>
-                        {departure.track}
-                      </TableCell>
-                      <TableCell>{departure.direction}</TableCell>
-                    </TableRow>
-                  );
-                })}
+                {this.props.departures
+                  .filter(trip => trip.track === track)
+                  .map(departure => {
+                    return (
+                      <TableRow key={departure.journeyid}>
+                        <TableCell>{departure.name}</TableCell>
+                        <TableCell>{departure.time}</TableCell>
+                        <TableCell>{departure.direction}</TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             ) : (
               <TableBody>
-                {this.props.arrivals.map(arrival => {
-                  return (
-                    <TableRow key={arrival.journeyid}>
-                      <TableCell>{arrival.name}</TableCell>
-                      <TableCell>{arrival.time}</TableCell>
-                      <TableCell padding="none" numeric>
-                        {arrival.track}
-                      </TableCell>
-                      <TableCell>{arrival.origin}</TableCell>
-                    </TableRow>
-                  );
-                })}
+                {this.props.arrivals
+                  .filter(trip => trip.track === track)
+                  .map(arrival => {
+                    return (
+                      <TableRow key={arrival.journeyid}>
+                        <TableCell>{arrival.name}</TableCell>
+                        <TableCell>{arrival.time}</TableCell>
+                        <TableCell>{arrival.origin}</TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             )}
           </Table>
