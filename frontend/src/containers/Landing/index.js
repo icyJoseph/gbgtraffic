@@ -4,10 +4,12 @@ import { createSelector } from "../../functional";
 import { fetchToken, selectId } from "../../ducks/auth";
 import {
   getPermissionStatus,
+  getMapToken,
   selectCoords,
-  getMapToken
+  selectMapToken
 } from "../../ducks/geoLocation";
 
+import MapBox from "../../components/MapBox";
 export class Landing extends Component {
   componentDidMount() {
     this.props.fetchToken();
@@ -22,16 +24,25 @@ export class Landing extends Component {
           and your location is:{" "}
           {`${this.props.lat ? `${this.props.lat} ${this.props.lng}` : ""}`}
         </div>
+        <MapBox
+          token={this.props.map_token}
+          lat={this.props.lat}
+          lng={this.props.lng}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-  createSelector([selectId, selectCoords], (id, { lat, lng }) => ({
-    id,
-    lat,
-    lng
-  })),
+  createSelector(
+    [selectId, selectCoords, selectMapToken],
+    (id, { lat, lng }, map_token) => ({
+      id,
+      lat,
+      lng,
+      map_token
+    })
+  ),
   { fetchToken, getPermissionStatus, getMapToken }
 )(Landing);
