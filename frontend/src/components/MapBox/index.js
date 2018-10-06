@@ -15,7 +15,9 @@ class MapBox extends Component {
     this.map.touchZoomRotate.disable();
     this.map.scrollZoom.disable();
 
-    this.marker = new mapboxgl.Marker()
+    this.marker = new mapboxgl.Marker({
+      draggable: true
+    })
       .setLngLat([this.props.lng, this.props.lat])
       .addTo(this.map);
 
@@ -24,6 +26,7 @@ class MapBox extends Component {
       el.setAttribute("id", id);
       return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(this.map);
     });
+    this.marker.on("dragend", this.onDragEnd);
     this.props.callback();
   }
 
@@ -49,6 +52,11 @@ class MapBox extends Component {
   setCenter = center => {
     this.map.setCenter(center);
     this.marker.setLngLat(center);
+  };
+
+  onDragEnd = () => {
+    const { lng, lat } = this.marker.getLngLat();
+    return this.props.setCurrentPosition(lat, lng);
   };
 
   componentWillUnmount() {
