@@ -3,7 +3,13 @@ import { connect } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Marker from "../../components/Marker";
+import Typography from "@material-ui/core/Typography";
+
 import Board from "../../components/Board";
+import {
+  BoardContainer,
+  StyledPaperContainer
+} from "../../components/Board/styled";
 import { createSelector } from "../../functional";
 import { fetchToken } from "../../ducks/auth";
 import {
@@ -26,7 +32,9 @@ import {
   selectNearbyStopLocations,
   selectDepartureBoard,
   selectArrivalBoard,
-  fetchBoard
+  fetchBoard,
+  selectServerDate,
+  selectServerTime
 } from "../../ducks/traffic";
 import MapBox from "../../components/MapBox";
 
@@ -45,6 +53,11 @@ export class Landing extends Component {
     const mapTokenExpired = new Date().getTime() > this.props.map_token_expiry;
     return (
       <div>
+        <Paper style={{ width: "80%", maxWidth: "500px", margin: "10px auto" }}>
+          <Typography variant="body1" color="inherit" align="center">
+            Server time: {this.props.time} - {this.props.date}
+          </Typography>
+        </Paper>
         {!mapTokenExpired && (
           <MapBox
             token={this.props.map_token}
@@ -69,27 +82,8 @@ export class Landing extends Component {
               />
             ))}
         {this.props.stopCardState && (
-          <div
-            style={{
-              position: "absolute",
-              width: "80%",
-              margin: "0 auto",
-              bottom: "50px",
-              zIndex: 10
-            }}
-          >
-            <Paper
-              elevation={3}
-              style={{
-                width: "75%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                margin: "0 auto",
-                padding: "10px",
-                height: "250px"
-              }}
-            >
+          <BoardContainer>
+            <StyledPaperContainer elevation={3}>
               <Board
                 current={this.props.currentStopId}
                 nearby={this.props.nearby}
@@ -98,9 +92,9 @@ export class Landing extends Component {
                 fetch={this.props.fetchBoard}
                 close={this.props.closeStopCard}
               />
-              <Button onClick={this.props.closeStopCard}>close</Button>
-            </Paper>
-          </div>
+              <Button onClick={this.props.closeStopCard}>Close</Button>
+            </StyledPaperContainer>
+          </BoardContainer>
         )}
       </div>
     );
@@ -118,7 +112,9 @@ const mapStateToProps = createSelector(
     selectStopId,
     selectNearbyStopsFetchingStatus,
     selectDepartureBoard,
-    selectArrivalBoard
+    selectArrivalBoard,
+    selectServerDate,
+    selectServerTime
   ],
   (
     { lat, lng },
@@ -130,7 +126,9 @@ const mapStateToProps = createSelector(
     currentStopId,
     fetching,
     departures,
-    arrivals
+    arrivals,
+    date,
+    time
   ) => ({
     lat,
     lng,
@@ -142,7 +140,9 @@ const mapStateToProps = createSelector(
     currentStopId,
     fetching,
     departures,
-    arrivals
+    arrivals,
+    date,
+    time
   })
 );
 
