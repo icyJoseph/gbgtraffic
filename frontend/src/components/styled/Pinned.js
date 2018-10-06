@@ -6,6 +6,6 @@ export const Pinned = styled.div`
   bottom: 50px;
   right: 15px;
   display: flex;
-  z-index: 30;
+  z-index: 5;
   flex-direction: column-reverse;
 `;
