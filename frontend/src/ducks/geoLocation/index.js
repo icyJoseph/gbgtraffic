@@ -41,8 +41,8 @@ export default function reducer(
   geo = {
     permission: false,
     query: null,
-    lat: null,
-    lng: null,
+    lat: 57.706827,
+    lng: 11.976481,
     fetching: false,
     map_token: null,
     map_token_expiry: null,
