@@ -1,4 +1,4 @@
-# Traffic Stops Around You!
+# Bus/Tram Stops Around You!
 
 Demo available at [BusApp](https://wiry-coal.surge.sh/).
 
