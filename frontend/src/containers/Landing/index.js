@@ -16,6 +16,7 @@ import {
 import {
   getPermissionStatus,
   getMapToken,
+  setCurrentPosition,
   selectCoords,
   selectMapToken,
   selectMapTokenExpiry
@@ -53,21 +54,26 @@ export class Landing extends Component {
             zoom={this.props.zoom}
             callback={this.toggleLoadMarkers}
             fetching={this.props.fetching}
+            setCurrentPosition={this.props.setCurrentPosition}
           />
         )}
         {this.state.loadMarkers &&
-          this.props.nearby.map(stop => (
-            <Marker
-              key={stop.id}
-              {...stop}
-              callback={this.props.openStopCard}
-            />
-          ))}
+          this.props.nearby
+            .filter(({ track }) => (this.props.zoom > 13 ? track : !track))
+            .map(stop => (
+              <Marker
+                key={stop.id}
+                reference={this.props.nearby}
+                {...stop}
+                callback={this.props.openStopCard}
+              />
+            ))}
         {this.props.stopCardState && (
           <div
             style={{
               position: "absolute",
-              width: "100%",
+              width: "80%",
+              margin: "0 auto",
               bottom: "50px",
               zIndex: 10
             }}
@@ -146,7 +152,8 @@ const mapDispatchToProps = {
   getMapToken,
   openStopCard,
   closeStopCard,
-  fetchBoard
+  fetchBoard,
+  setCurrentPosition
 };
 
 export default connect(
