@@ -49,7 +49,7 @@ export const getNearbyStops = (token, originCoordLat, originCoordLong) => {
       return {
         serverdate,
         servertime,
-        StopLocation
+        nearbyStopLocations: StopLocation
       };
     });
 };
