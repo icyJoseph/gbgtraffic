@@ -16,7 +16,7 @@ export const zoomOut = () => ({
 
 export const openStopCard = id => ({
   type: OPEN_STOP_CARD,
-  id
+  payload: id
 });
 
 export const closeStopCard = () => ({
@@ -25,7 +25,7 @@ export const closeStopCard = () => ({
 
 export const selectState = state => state.map;
 export const selectZoom = state => selectState(state).zoom;
-export const selectStopCard = state => selectState(state).stopCard;
+export const selectStopCardState = state => selectState(state).stopCard;
 export const selectStopId = state => selectState(state).id;
 
 export default function reducer(
