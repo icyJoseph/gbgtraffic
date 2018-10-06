@@ -28,12 +28,28 @@ class MapBox extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    return prevProps.zoom !== this.props.zoom
-      ? this.zoomTo(this.props.zoom)
-      : null;
+    if (prevProps.zoom !== this.props.zoom) {
+      this.zoomTo(this.props.zoom);
+    }
+    if (prevProps.lng !== this.props.lng && prevProps.lat !== this.props.lat) {
+      this.setCenter([this.props.lng, this.props.lat]);
+    }
+    if (prevProps.fetching === true && this.props.fetching === false) {
+      this.allMarkers = this.props.nearby.map(({ id, lat, lon }) => {
+        const el = document.createElement("div");
+        el.setAttribute("id", id);
+        return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(this.map);
+      });
+      this.props.callback();
+    }
+    return null;
   }
 
   zoomTo = zoom => this.map.zoomTo(zoom, { duration: 1000 });
+  setCenter = center => {
+    this.map.setCenter(center);
+    this.marker.setLngLat(center);
+  };
 
   componentWillUnmount() {
     this.map.remove();
