@@ -12,6 +12,7 @@ class MapBox extends Component {
       zoom
     });
 
+    this.map.touchZoomRotate.disable();
     this.map.scrollZoom.disable();
 
     this.marker = new mapboxgl.Marker()
@@ -49,13 +50,7 @@ class MapBox extends Component {
       zIndex: -10
     };
 
-    return (
-      <div
-        style={style}
-        ref={el => (this.mapContainer = el)}
-        onClick={this.zoomTo}
-      />
-    );
+    return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
 }
 
