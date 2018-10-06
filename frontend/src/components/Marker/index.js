@@ -6,11 +6,14 @@ import marker from "./marker.png";
 
 export const Marker = ({ id, callback }) => {
   const hook = document.getElementById(id);
-  return ReactDOM.createPortal(
-    <div onClick={curry(callback)(id)}>
-      <img src={marker} alt="Marker" style={{ width: "30px" }} />
-    </div>,
-    hook
+  return (
+    hook &&
+    ReactDOM.createPortal(
+      <div onClick={curry(callback)(id)}>
+        <img src={marker} alt="Marker" style={{ width: "30px" }} />
+      </div>,
+      hook
+    )
   );
 };
 
