@@ -5,6 +5,7 @@ import NavigateBefore from "@material-ui/icons/NavigateBefore";
 import Search from "@material-ui/icons/Search";
 
 import { getCurrentPosition } from "../../ducks/geoLocation";
+import { fetchNearbyStops } from "../../ducks/traffic";
 
 import { StyledButton } from "../../components/styled/Buttons";
 import { Pinned } from "../../components/styled/Pinned";
@@ -12,7 +13,7 @@ import { curry } from "../../functional";
 
 const goBack = history => history.push("/");
 
-export const Bottom = ({ history, getPos }) => (
+export const Bottom = ({ history, getPos, getStopsNearby }) => (
   <Pinned>
     <StyledButton
       variant="fab"
@@ -22,7 +23,12 @@ export const Bottom = ({ history, getPos }) => (
     >
       <NavigateBefore fontSize="large" />
     </StyledButton>
-    <StyledButton variant="fab" color="primary" aria-label="search">
+    <StyledButton
+      variant="fab"
+      color="primary"
+      aria-label="search"
+      onClick={getStopsNearby}
+    >
       <Search fontSize="large" />
     </StyledButton>
     <StyledButton
@@ -38,5 +44,5 @@ export const Bottom = ({ history, getPos }) => (
 
 export default connect(
   undefined,
-  { getPos: getCurrentPosition }
+  { getPos: getCurrentPosition, getStopsNearby: fetchNearbyStops }
 )(Bottom);
