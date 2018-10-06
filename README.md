@@ -14,15 +14,15 @@ Tech stack:
 
 > Create-react-app, with Redux, styled-components and MUI.
 
-> GeoLocation is done through MapBox's API.
+> GeoLocation is done through [MapBox's API](https://www.mapbox.com/).
 
-> The MapBox component uses MapBox's map-gl API.
+> The MapBox component uses MapBox's [mapbox-gl-js API](https://www.mapbox.com/install/js/).
 
-> Västtraffik's API is used to fetch depature/arrival data.
+> [Västtraffik's API](https://developer.vasttrafik.se/portal/#/) is used to fetch depature/arrival data.
 
-> Access tokens are temporary and generated through a webtask.
+> Access tokens are temporary and generated through a [webtask](https://webtask.io/).
 
-> Redux-Sagas to manage side effects.
+> [Redux-Saga](https://github.com/redux-saga/redux-saga) to manage side effects.
 
 > PWA ready. It even uses web API for geolocation.
 
