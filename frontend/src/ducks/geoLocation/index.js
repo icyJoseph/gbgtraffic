@@ -27,6 +27,11 @@ export const getMapToken = () => ({
   type: FETCH_MAP_TOKEN
 });
 
+export const setCurrentPosition = (lat, lng) => ({
+  type: SET_CURRENT_POSITION,
+  payload: { lat, lng }
+});
+
 export const selectState = state => state.geo;
 export const selectPermission = state => selectState(state).permission;
 export const selectCoords = state => ({
