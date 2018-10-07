@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Marker from "../../components/Marker";
-import Typography from "@material-ui/core/Typography";
-
 import Board from "../../components/Board";
 import {
   BoardContainer,
@@ -32,10 +29,9 @@ import {
   selectNearbyStopLocations,
   selectDepartureBoard,
   selectArrivalBoard,
-  fetchBoard,
-  selectServerDate,
-  selectServerTime
+  fetchBoard
 } from "../../ducks/traffic";
+
 import MapBox from "../../components/MapBox";
 
 export class Landing extends Component {
@@ -53,11 +49,6 @@ export class Landing extends Component {
     const mapTokenExpired = new Date().getTime() > this.props.map_token_expiry;
     return (
       <div>
-        <Paper style={{ width: "80%", maxWidth: "500px", margin: "10px auto" }}>
-          <Typography variant="body1" color="inherit" align="center">
-            Server time: {this.props.time} - {this.props.date}
-          </Typography>
-        </Paper>
         {!mapTokenExpired && (
           <MapBox
             token={this.props.map_token}
@@ -117,9 +108,7 @@ const mapStateToProps = createSelector(
     selectStopId,
     selectNearbyStopsFetchingStatus,
     selectDepartureBoard,
-    selectArrivalBoard,
-    selectServerDate,
-    selectServerTime
+    selectArrivalBoard
   ],
   (
     { lat, lng },
@@ -131,9 +120,7 @@ const mapStateToProps = createSelector(
     currentStopId,
     fetching,
     departures,
-    arrivals,
-    date,
-    time
+    arrivals
   ) => ({
     lat,
     lng,
@@ -145,9 +132,7 @@ const mapStateToProps = createSelector(
     currentStopId,
     fetching,
     departures,
-    arrivals,
-    date,
-    time
+    arrivals
   })
 );
 
