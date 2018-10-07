@@ -5,7 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "../../components/Avatar";
-import { selectId } from "../../ducks/auth";
+import { selectId, selectExpiry } from "../../ducks/auth";
 import { createSelector } from "../../functional";
 
 const styles = {
@@ -13,19 +13,20 @@ const styles = {
     flexGrow: 1
   }
 };
-export const Header = ({ id, classes, date, time }) => (
+export const Header = ({ id, classes, expiry }) => (
   <AppBar position="static" color="primary">
     <Toolbar>
       <Typography variant="title" color="inherit" className={classes.grow}>
         Bus App
       </Typography>
-      <Avatar id={id} />
+      <Avatar id={id} expiry={expiry} />
     </Toolbar>
   </AppBar>
 );
 
 export default connect(
-  createSelector([selectId], id => ({
-    id
+  createSelector([selectId, selectExpiry], (id, expiry) => ({
+    id,
+    expiry
   }))
 )(withStyles(styles)(Header));
