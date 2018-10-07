@@ -3,11 +3,9 @@ export const FAILED_TOKEN = "failed_token";
 export const SUCCESS_TOKEN = "success_token";
 export const UPDATE_TOKEN = "update_token";
 
-export const fetchToken = () => {
-  return {
-    type: FETCH_TOKEN
-  };
-};
+export const fetchToken = () => ({
+  type: FETCH_TOKEN
+});
 
 export const selectState = state => state.auth;
 export const selectToken = state => selectState(state).access_token;
