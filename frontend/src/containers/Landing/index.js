@@ -92,7 +92,12 @@ export class Landing extends Component {
                 fetch={this.props.fetchBoard}
                 close={this.props.closeStopCard}
               />
-              <Button onClick={this.props.closeStopCard}>Close</Button>
+              <Button
+                style={{ margin: "auto" }}
+                onClick={this.props.closeStopCard}
+              >
+                Close
+              </Button>
             </StyledPaperContainer>
           </BoardContainer>
         )}
