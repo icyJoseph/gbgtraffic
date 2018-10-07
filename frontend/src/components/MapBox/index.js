@@ -26,6 +26,7 @@ class MapBox extends Component {
       el.setAttribute("id", id);
       return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(this.map);
     });
+    this.marker.on("dragstart", this.blockScrollToRefresh);
     this.marker.on("dragend", this.onDragEnd);
     this.props.callback();
   }
@@ -49,13 +50,27 @@ class MapBox extends Component {
   }
 
   zoomTo = zoom => this.map.zoomTo(zoom, { duration: 1000 });
+
   setCenter = center => {
     this.map.setCenter(center);
     this.marker.setLngLat(center);
   };
 
+  preventDefault = e => {
+    return e && e.preventDefault();
+  };
+
+  blockScrollToRefresh = () => {
+    return window.addEventListener("touchmove", this.preventDefault, {
+      passive: false
+    });
+  };
+
   onDragEnd = () => {
     const { lng, lat } = this.marker.getLngLat();
+    window.removeEventListener("touchmove", this.preventDefault, {
+      passive: false
+    });
     return this.props.setCurrentPosition(lat, lng);
   };
 
