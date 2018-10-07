@@ -35,7 +35,8 @@ class Board extends Component {
     return (
       <Fragment>
         <Typography variant="title" gutterBottom>
-          Track {track} - {stop.name}
+          {track && `Track ${track} - `}
+          {stop.name}
         </Typography>
         <Tabs
           position="sticky"
@@ -62,7 +63,8 @@ class Board extends Component {
             {this.state.value === 0 ? (
               <TableBody>
                 {this.props.departures
-                  .filter(trip => trip.track === track)
+                  // .filter(trip => !track || trip.track === track)
+                  .filter(trip => !track || trip.track === track)
                   .map(departure => {
                     return (
                       <TableRow key={departure.journeyid}>
