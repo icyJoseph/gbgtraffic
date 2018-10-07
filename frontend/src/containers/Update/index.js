@@ -26,8 +26,8 @@ class Update extends Component {
   };
 
   refreshPage = () =>
-    new Promise(resolve => resolve(localStorage.removeItem("state"))).then(() =>
-      window.location.reload()
+    new Promise(resolve => resolve(localStorage.removeItem("bus-app"))).then(
+      () => window.location.reload()
     );
 
   render() {
