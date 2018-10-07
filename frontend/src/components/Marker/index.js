@@ -23,7 +23,9 @@ export const Marker = ({ id, callback, track, reference, name }) => {
         }}
       >
         <Typography variant="subheading" align="center" color="inherit">
-          {track ? track : reference.filter(ref => ref.name === name).length}
+          {track
+            ? track
+            : reference.filter(ref => ref.name === name && ref.track).length}
         </Typography>
         <img src={marker} alt="Marker" style={{ width: "30px" }} />
       </Paper>,
