@@ -8,6 +8,7 @@ export const BoardContainer = styled.div`
   bottom: 50px;
   z-index: 10;
   @media (min-width: 1023px) {
+    height: 70%;
     width: 500px;
   }
 `;
@@ -34,7 +35,7 @@ export const TableContainer = styled.div`
   width: 100%;
 
   @media (min-width: 1023px) {
-    height: 100%;
+    height: 70%;
     width: 400px;
   }
 
