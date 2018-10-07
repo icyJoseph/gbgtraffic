@@ -2,10 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import DirectionsBus from "@material-ui/icons/DirectionsBus";
 import LocationOn from "@material-ui/icons/LocationOn";
+import LocationOff from "@material-ui/icons/LocationOff";
 import ZoomIn from "@material-ui/icons/ZoomIn";
 import ZoomOut from "@material-ui/icons/ZoomOut";
 
-import { getCurrentPosition } from "../../ducks/geoLocation";
+import { createSelector } from "../../functional";
+import { getCurrentPosition, selectPermission } from "../../ducks/geoLocation";
 import { fetchNearbyStops } from "../../ducks/traffic";
 import { zoomIn, zoomOut } from "../../ducks/map";
 
@@ -16,7 +18,8 @@ export const Bottom = ({
   increaseZoom,
   decreaseZoom,
   getPos,
-  getStopsNearby
+  getStopsNearby,
+  permission
 }) => (
   <Pinned>
     <StyledButton
@@ -50,13 +53,17 @@ export const Bottom = ({
       aria-label="search"
       onClick={getPos}
     >
-      <LocationOn fontSize="large" />
+      {permission === "granted" ? (
+        <LocationOn fontSize="large" />
+      ) : (
+        <LocationOff fontSize="large" />
+      )}
     </StyledButton>
   </Pinned>
 );
 
 export default connect(
-  undefined,
+  createSelector([selectPermission], permission => ({ permission })),
   {
     getPos: getCurrentPosition,
     getStopsNearby: fetchNearbyStops,
