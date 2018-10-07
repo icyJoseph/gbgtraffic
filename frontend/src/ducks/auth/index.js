@@ -31,7 +31,7 @@ export default function reducer(
     case UPDATE_TOKEN:
       return { ...auth, ...payload, failed: false };
     case FAILED_TOKEN:
-      return { ...auth, failed: true };
+      return { ...auth, failed: true, id: undefined };
     default:
       return auth;
   }
