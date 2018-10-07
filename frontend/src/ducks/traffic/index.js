@@ -26,14 +26,28 @@ export const selectArrivalBoard = state => selectState(state).Arrival;
 export const selectServerTime = state => selectState(state).servertime;
 export const selectServerDate = state => selectState(state).serverdate;
 
+export const selectFetchingState = state => {
+  const {
+    errorFetchingNearbyStops,
+    fetchingNearbyStops,
+    fetchingBoard,
+    errorFetchingBoard
+  } = selectState(state);
+  return {
+    fetching: fetchingNearbyStops || fetchingBoard,
+    error: errorFetchingNearbyStops || errorFetchingBoard
+  };
+};
+
 export default function reducer(
   traffic = {
     serverdate: null,
     servertime: null,
-    nearbyStopLocations: [],
+    errorFetchingNearbyStops: false,
     fetchingNearbyStops: false,
-    errorFetchingNearbyStops: null,
-    failed: false,
+    nearbyStopLocations: [],
+    fetchingBoard: false,
+    errorFetchingBoard: false,
     Departure: [],
     Arrival: []
   },
@@ -41,7 +55,11 @@ export default function reducer(
 ) {
   switch (type) {
     case FETCH_NEARBY_STOPS:
-      return { ...traffic, fetchingNearbyStops: true, failed: false };
+      return {
+        ...traffic,
+        fetchingNearbyStops: true,
+        errorFetchingNearbyStops: false
+      };
     case SUCCESS_NEARBY_STOPS:
       return {
         ...traffic,
@@ -50,9 +68,13 @@ export default function reducer(
         failed: false
       };
     case FAILED_NEARBY_STOPS:
-      return { ...traffic, failed: true };
+      return { ...traffic, errorFetchingNearbyStops: true };
+    case FETCH_BOARD:
+      return { ...traffic, fetchingBoard: true };
     case SUCCESS_BOARD:
-      return { ...traffic, ...payload };
+      return { ...traffic, ...payload, fetchingBoard: false };
+    case FAILED_BOARD:
+      return { ...traffic, fetchingBoard: false, errorFetchingBoard: true };
     default:
       return traffic;
   }
