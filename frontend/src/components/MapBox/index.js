@@ -62,7 +62,7 @@ class MapBox extends Component {
   componentWillUnmount() {
     this.map.remove();
     this.marker.remove();
-    this.allMarkers.remove();
+    this.allMarkers.map(marker => marker.remove());
   }
 
   render() {
