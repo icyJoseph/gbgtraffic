@@ -37,14 +37,14 @@ class Update extends Component {
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
-          message={<span id="message-id">Update available!</span>}
+          message={<span id="message-id">New version available!</span>}
           action={
             <Button
               color="inherit"
               style={{ color: "rgba(255,0,80)" }}
               onClick={this.refreshPage}
             >
-              Refresh
+              Update
             </Button>
           }
         />
