@@ -7,11 +7,13 @@ import {
   selectServerTime,
   selectFetchingState
 } from "../../ducks/traffic";
-
 import { createSelector } from "../../functional";
 
+const showDate = (time, date) =>
+  time && date ? `Server time: ${time} - ${date}` : "Ready to start!";
+
 const isFetchingMessage = (fetching, time, date) =>
-  fetching ? "Fetching resources." : `Server time: ${time} - ${date}`;
+  fetching ? "Fetching resources." : showDate(time, date);
 
 export class Banner extends Component {
   // Show different messages
