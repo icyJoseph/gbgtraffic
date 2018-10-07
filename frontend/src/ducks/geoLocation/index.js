@@ -15,10 +15,6 @@ export const SET_ADDRES_RESULT = "set_address_result";
 
 export const FAILED_GEO = "failed_geo";
 
-export const getPermissionStatus = () => ({
-  type: GET_GEO_PERMISSION
-});
-
 export const getCurrentPosition = () => ({
   type: GET_CURRENT_POSITION
 });

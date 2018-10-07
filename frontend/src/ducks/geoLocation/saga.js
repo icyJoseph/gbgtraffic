@@ -4,7 +4,6 @@ import {
   selectPermission,
   selectMapToken,
   selectMapTokenExpiry,
-  GET_GEO_PERMISSION,
   SET_GEO_PERMISSION,
   FETCH_MAP_TOKEN,
   UPDATE_MAP_TOKEN,
@@ -26,6 +25,7 @@ export function* getGeoPermission() {
 
 export function* getCurrentPosition() {
   try {
+    yield call(getGeoPermission);
     const permission = yield select(selectPermission);
     if (permission === "granted") {
       const coords = yield call(reportGeolocation);
@@ -53,7 +53,6 @@ export function* loadMapToken() {
 
 export function* geoSaga() {
   yield all([
-    fork(takeLatest, GET_GEO_PERMISSION, getGeoPermission),
     fork(takeLatest, GET_CURRENT_POSITION, getCurrentPosition),
     fork(takeLatest, FETCH_MAP_TOKEN, loadMapToken)
   ]);

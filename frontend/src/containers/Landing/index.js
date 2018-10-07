@@ -17,7 +17,6 @@ import {
   closeStopCard
 } from "../../ducks/map";
 import {
-  getPermissionStatus,
   getMapToken,
   setCurrentPosition,
   selectCoords,
@@ -42,7 +41,6 @@ export class Landing extends Component {
   toggleLoadMarkers = () => this.setState({ loadMarkers: true });
   componentDidMount() {
     this.props.fetchToken();
-    this.props.getPermissionStatus();
     this.props.getMapToken();
   }
   render() {
@@ -138,7 +136,7 @@ const mapStateToProps = createSelector(
 
 const mapDispatchToProps = {
   fetchToken,
-  getPermissionStatus,
+
   getMapToken,
   openStopCard,
   closeStopCard,
