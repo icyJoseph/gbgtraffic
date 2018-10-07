@@ -63,7 +63,7 @@ export class Landing extends Component {
         )}
         {this.state.loadMarkers &&
           this.props.nearby
-            .filter(({ track }) => (this.props.zoom > 13 ? track : !track))
+            .filter(({ track }) => (this.props.zoom > 14 ? track : !track))
             .map(stop => (
               <Marker
                 key={stop.id}
