@@ -2,7 +2,7 @@ import { all, fork, takeLatest, call, put, select } from "redux-saga/effects";
 import { getNearbyStops, getDepartureBoard, getArrivalBoard } from "./api";
 import { selectStopId } from "../map";
 import { selectCoords } from "../geoLocation";
-import { selectToken } from "../auth";
+import { FETCH_TOKEN, selectToken } from "../auth";
 import {
   FETCH_NEARBY_STOPS,
   SUCCESS_NEARBY_STOPS,
@@ -19,6 +19,7 @@ export function* loadNearbyStops() {
     const payload = yield call(getNearbyStops, token, lat, lng);
     yield put({ type: SUCCESS_NEARBY_STOPS, payload });
   } catch (error) {
+    yield put({ type: FETCH_TOKEN });
     yield put({ type: FAILED_NEARBY_STOPS, error });
   }
 }
