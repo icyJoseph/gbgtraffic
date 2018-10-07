@@ -41,8 +41,8 @@ export const selectFetchingState = state => {
 
 export default function reducer(
   traffic = {
-    serverdate: null,
-    servertime: null,
+    serverdate: undefined,
+    servertime: undefined,
     errorFetchingNearbyStops: false,
     fetchingNearbyStops: false,
     nearbyStopLocations: [],
@@ -68,13 +68,24 @@ export default function reducer(
         failed: false
       };
     case FAILED_NEARBY_STOPS:
-      return { ...traffic, errorFetchingNearbyStops: true };
+      return {
+        ...traffic,
+        errorFetchingNearbyStops: true,
+        serverdate: undefined,
+        servertime: undefined
+      };
     case FETCH_BOARD:
       return { ...traffic, fetchingBoard: true };
     case SUCCESS_BOARD:
       return { ...traffic, ...payload, fetchingBoard: false };
     case FAILED_BOARD:
-      return { ...traffic, fetchingBoard: false, errorFetchingBoard: true };
+      return {
+        ...traffic,
+        fetchingBoard: false,
+        errorFetchingBoard: true,
+        serverdate: undefined,
+        servertime: undefined
+      };
     default:
       return traffic;
   }
