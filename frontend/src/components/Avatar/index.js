@@ -15,7 +15,11 @@ export const Pixel = ({ red, green, blue }) => (
   />
 );
 
-export const Avatar = ({ id = "" }) => {
+export const Avatar = ({ id = "", expiry }) => {
+  const valid = new Date() < new Date(expiry);
+  if (!valid) {
+    return null;
+  }
   const joint = id.split("-").join("");
   const rawData = pipe(
     split,
