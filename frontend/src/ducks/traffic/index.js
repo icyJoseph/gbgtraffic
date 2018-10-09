@@ -65,19 +65,25 @@ export default function reducer(
         ...traffic,
         ...payload,
         fetchingNearbyStops: false,
-        failed: false
+        errorFetchingNearbyStops: false
       };
     case FAILED_NEARBY_STOPS:
       return {
         ...traffic,
+        fetchingNearbyStops: false,
         errorFetchingNearbyStops: true,
         serverdate: undefined,
         servertime: undefined
       };
     case FETCH_BOARD:
-      return { ...traffic, fetchingBoard: true };
+      return { ...traffic, fetchingBoard: true, errorFetchingBoard: false };
     case SUCCESS_BOARD:
-      return { ...traffic, ...payload, fetchingBoard: false };
+      return {
+        ...traffic,
+        ...payload,
+        fetchingBoard: false,
+        errorFetchingBoard: false
+      };
     case FAILED_BOARD:
       return {
         ...traffic,
