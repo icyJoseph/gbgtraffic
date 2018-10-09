@@ -22,9 +22,9 @@ export class Banner extends Component {
     return (
       <Paper style={{ width: "80%", maxWidth: "500px", margin: "10px auto" }}>
         <Typography variant="body1" color="inherit" align="center">
-          {!error
-            ? isFetchingMessage(fetching, time, date)
-            : "Error while fetching, please retry."}
+          {error
+            ? "Error while fetching, please retry."
+            : isFetchingMessage(fetching, time, date)}
         </Typography>
       </Paper>
     );
