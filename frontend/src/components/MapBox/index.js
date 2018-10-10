@@ -14,6 +14,12 @@ class MapBox extends Component {
 
     this.map.touchZoomRotate.disable();
     this.map.scrollZoom.disable();
+    this.map.on("error", ({ error }) => {
+      const { status } = error;
+      if (status === 401) {
+        return this.props.fetchMapToken();
+      }
+    });
 
     this.marker = new mapboxgl.Marker({
       draggable: true
@@ -32,6 +38,9 @@ class MapBox extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.token !== this.props.token) {
+      mapboxgl.accessToken = this.props.token;
+    }
     if (prevProps.zoom !== this.props.zoom) {
       this.zoomTo(this.props.zoom);
     }
@@ -46,6 +55,7 @@ class MapBox extends Component {
       });
       this.props.callback();
     }
+
     return null;
   }
 
