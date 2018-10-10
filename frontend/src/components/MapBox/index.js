@@ -60,7 +60,7 @@ class MapBox extends Component {
   zoomTo = zoom => this.map.zoomTo(zoom, { duration: 1000 });
 
   setCenter = center => {
-    this.map.setCenter(center);
+    this.map.flyTo({ center, zoom: this.props.zoom });
     this.marker.setLngLat(center);
   };
 
