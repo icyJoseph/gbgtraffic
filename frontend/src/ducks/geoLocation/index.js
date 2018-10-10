@@ -8,6 +8,7 @@ export const FETCH_MAP_TOKEN = "fetch_map_token";
 export const UPDATE_MAP_TOKEN = "update_map_token";
 export const SUCCESS_MAP_TOKEN = "sucess_map_token";
 export const FAILED_MAP_TOKEN = "failed_map_token";
+export const FLUSH_MAP_TOKEN = "flush_map_token";
 
 export const FETCH_ADRESS_BYCOORDS = "fetch_address_bycoords";
 export const FETCH_ADRESS_BYQUERY = "fetch_address_byquery";
@@ -26,6 +27,10 @@ export const fetchMapToken = () => ({
 export const setCurrentPosition = (lat, lng) => ({
   type: SET_CURRENT_POSITION,
   payload: { lat, lng }
+});
+
+export const flushMapToken = () => ({
+  type: FLUSH_MAP_TOKEN
 });
 
 export const selectState = state => state.geo;
@@ -48,6 +53,7 @@ export default function reducer(
     map_token: null,
     map_token_expiry: null,
     fetching_map_token: false,
+    failed_map_token: false,
     previous: {}
   },
   { type, payload }
@@ -59,7 +65,9 @@ export default function reducer(
     case FETCH_ADRESS_BYQUERY:
       return { ...geo, fetching: true };
     case FETCH_MAP_TOKEN:
-      return { ...geo, fetching_map_token: true };
+      return { ...geo, fetching_map_token: true, failed_map_token: false };
+    case FAILED_MAP_TOKEN:
+      return { ...geo, fetching_map_token: false, failed_map_token: true };
     case UPDATE_MAP_TOKEN:
       return {
         ...geo,
@@ -68,6 +76,14 @@ export default function reducer(
       };
     case SUCCESS_MAP_TOKEN:
       return { ...geo, fetching_map_token: false };
+    case FLUSH_MAP_TOKEN:
+      return {
+        ...geo,
+        map_token: null,
+        map_token_expiry: null,
+        fetching_map_token: false,
+        failed_map_token: false
+      };
     case SET_CURRENT_POSITION:
       const { lat, lng } = payload;
       return { ...geo, lat, lng, fetching: false };

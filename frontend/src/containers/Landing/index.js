@@ -21,7 +21,8 @@ import {
   setCurrentPosition,
   selectCoords,
   selectMapToken,
-  selectMapTokenExpiry
+  selectMapTokenExpiry,
+  flushMapToken
 } from "../../ducks/geoLocation";
 import {
   selectNearbyStopsFetchingStatus,
@@ -40,7 +41,7 @@ export class Landing extends Component {
   };
 
   debouncedFetchMapToken = debounce(this.props.fetchMapToken, 500);
-
+  debouncedFlush = debounce(this.props.flushMapToken, 500);
   toggleLoadMarkers = () => this.setState({ loadMarkers: true });
   componentDidMount() {
     this.props.fetchToken();
@@ -60,6 +61,7 @@ export class Landing extends Component {
             fetching={this.props.fetching}
             setCurrentPosition={this.props.setCurrentPosition}
             fetchMapToken={this.debouncedFetchMapToken}
+            flushMapToken={this.debouncedFlush}
           />
         )}
         {this.state.loadMarkers &&
@@ -140,6 +142,7 @@ const mapStateToProps = createSelector(
 const mapDispatchToProps = {
   fetchToken,
   fetchMapToken,
+  flushMapToken,
   openStopCard,
   closeStopCard,
   fetchBoard,
