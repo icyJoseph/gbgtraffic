@@ -11,7 +11,7 @@ export const FAILED_MAP_TOKEN = "failed_map_token";
 
 export const FETCH_ADRESS_BYCOORDS = "fetch_address_bycoords";
 export const FETCH_ADRESS_BYQUERY = "fetch_address_byquery";
-export const SET_ADDRES_RESULT = "set_address_result";
+export const SET_ADDRESS_RESULT = "set_address_result";
 
 export const FAILED_GEO = "failed_geo";
 
@@ -19,7 +19,7 @@ export const getCurrentPosition = () => ({
   type: GET_CURRENT_POSITION
 });
 
-export const getMapToken = () => ({
+export const fetchMapToken = () => ({
   type: FETCH_MAP_TOKEN
 });
 
@@ -71,7 +71,7 @@ export default function reducer(
     case SET_CURRENT_POSITION:
       const { lat, lng } = payload;
       return { ...geo, lat, lng, fetching: false };
-    case SET_ADDRES_RESULT:
+    case SET_ADDRESS_RESULT:
       const { query } = payload;
       return {
         ...geo,
