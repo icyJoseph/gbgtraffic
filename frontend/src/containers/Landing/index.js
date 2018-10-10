@@ -17,7 +17,7 @@ import {
   closeStopCard
 } from "../../ducks/map";
 import {
-  getMapToken,
+  fetchMapToken,
   setCurrentPosition,
   selectCoords,
   selectMapToken,
@@ -32,22 +32,24 @@ import {
 } from "../../ducks/traffic";
 
 import MapBox from "../../components/MapBox";
+import { debounce } from "../../utils/debounce";
 
 export class Landing extends Component {
   state = {
     loadMarkers: false
   };
 
+  debouncedFetchMapToken = debounce(this.props.fetchMapToken, 500);
+
   toggleLoadMarkers = () => this.setState({ loadMarkers: true });
   componentDidMount() {
     this.props.fetchToken();
-    this.props.getMapToken();
+    this.props.fetchMapToken();
   }
   render() {
-    const mapTokenExpired = new Date().getTime() > this.props.map_token_expiry;
     return (
       <div>
-        {!mapTokenExpired && (
+        {this.props.map_token && (
           <MapBox
             token={this.props.map_token}
             lat={this.props.lat}
@@ -57,6 +59,7 @@ export class Landing extends Component {
             callback={this.toggleLoadMarkers}
             fetching={this.props.fetching}
             setCurrentPosition={this.props.setCurrentPosition}
+            fetchMapToken={this.debouncedFetchMapToken}
           />
         )}
         {this.state.loadMarkers &&
@@ -136,8 +139,7 @@ const mapStateToProps = createSelector(
 
 const mapDispatchToProps = {
   fetchToken,
-
-  getMapToken,
+  fetchMapToken,
   openStopCard,
   closeStopCard,
   fetchBoard,
