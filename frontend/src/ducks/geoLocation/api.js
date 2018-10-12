@@ -23,8 +23,13 @@ export const checkPermission = () => {
           return resolve(result.state);
         })
         .catch(reject);
+    } else {
+      return navigator.geolocation.getCurrentPosition(
+        () => resolve("granted"),
+        () => resolve("denied"),
+        options
+      );
     }
-    reject();
   });
 };
 
