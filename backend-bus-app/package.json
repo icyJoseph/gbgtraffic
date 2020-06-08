@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "backend.js",
-  "scripts": { 
+  "scripts": {
     "deploy": "wt create index.js --name bus-app --secrets-file .secrets",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "nodemon --exec \"wt serve backend.js --hostname localhost --port 1337 --secrets-file .secrets --meta ENV=DEV\""
+    "serve": "nodemon --exec \"wt serve index.js --hostname localhost --port 1337 --secrets-file .secrets --meta ENV=DEV\""
   },
   "author": "",
   "license": "ISC",
