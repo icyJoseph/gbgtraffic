@@ -82,7 +82,7 @@ function MapBox({
 
       return () => currentMarker.remove();
     }
-  }, [lat, lng, onDragEnd]);
+  }, [lat, lng, onDragEnd, blockScrollToRefresh]);
 
   React.useEffect(() => {
     console.count("zoom adjust");
