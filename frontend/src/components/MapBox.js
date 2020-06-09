@@ -1,104 +1,133 @@
-import React, { Component } from "react";
+import React from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 
-class MapBox extends Component {
-  componentDidMount() {
-    mapboxgl.accessToken = this.props.token;
-    const zoom = this.props.zoom;
-    this.map = new mapboxgl.Map({
-      container: this.mapContainer,
+function MapBox({
+  callback,
+  nearby,
+  zoom,
+  token,
+  lng,
+  lat,
+  flushMapToken,
+  fetchMapToken,
+  setCurrentPosition
+}) {
+  const map = React.useRef();
+  const mapContainer = React.useRef();
+  const marker = React.useRef();
+  const allMarkers = React.useRef();
+
+  const blockScrollToRefresh = React.useCallback(() => {
+    return window.addEventListener("touchmove", (e) => e.preventDefault(), {
+      passive: false
+    });
+  }, []);
+
+  const onDragEnd = React.useCallback(() => {
+    const { lng, lat } = marker.current.getLngLat();
+    window.removeEventListener("touchmove", (e) => e.preventDefault(), {
+      passive: false
+    });
+    return setCurrentPosition(lat, lng);
+  }, [setCurrentPosition]);
+
+  const initMap = React.useRef({ lng, lat, zoom });
+
+  React.useEffect(() => {
+    console.count("mapbox setup");
+
+    mapboxgl.accessToken = token;
+
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v9",
-      center: [this.props.lng, this.props.lat],
-      zoom
+      center: [initMap.current.lng, initMap.current.lat],
+      zoom: initMap.current.zoom
     });
 
-    this.map.touchZoomRotate.disable();
-    this.map.scrollZoom.disable();
+    map.current.touchZoomRotate.disable();
+    map.current.scrollZoom.disable();
 
-    this.map.on("error", ({ error }) => {
-      const { status } = error;
-      if (status === 401) {
-        return this.props.flushMapToken() || this.props.fetchMapToken();
+    const currentMap = map.current;
+
+    return () => currentMap.remove();
+  }, [token]);
+
+  React.useEffect(() => {
+    if (map.current) {
+      map.current.on("error", ({ error }) => {
+        const { status } = error;
+        if (status === 401) {
+          flushMapToken();
+          fetchMapToken();
+        }
+      });
+    }
+  }, [flushMapToken, fetchMapToken]);
+
+  React.useEffect(() => {
+    console.count("main marker setup");
+    if (map.current) {
+      if (!marker.current) {
+        marker.current = new mapboxgl.Marker({
+          draggable: true
+        });
+        marker.current.on("dragstart", blockScrollToRefresh);
+        marker.current.on("dragend", onDragEnd);
       }
-    });
 
-    this.marker = new mapboxgl.Marker({
-      draggable: true
-    })
-      .setLngLat([this.props.lng, this.props.lat])
-      .addTo(this.map);
+      marker.current.setLngLat([lng, lat]).addTo(map.current);
 
-    this.allMarkers = this.props.nearby.map(({ id, lat, lon }) => {
-      const el = document.createElement("div");
-      el.setAttribute("id", id);
-      return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(this.map);
-    });
-    this.marker.on("dragstart", this.blockScrollToRefresh);
-    this.marker.on("dragend", this.onDragEnd);
-    this.props.callback();
-  }
+      const currentMarker = marker.current;
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.zoom !== this.props.zoom) {
-      this.zoomTo(this.props.zoom);
+      return () => currentMarker.remove();
     }
-    if (prevProps.lng !== this.props.lng && prevProps.lat !== this.props.lat) {
-      this.setCenter([this.props.lng, this.props.lat]);
+  }, [lat, lng, onDragEnd]);
+
+  React.useEffect(() => {
+    console.count("zoom adjust");
+    if (map.current) {
+      map.current.zoomTo(zoom, { duration: 1000 });
     }
-    if (prevProps.fetching === true && this.props.fetching === false) {
-      this.allMarkers = this.props.nearby.map(({ id, lat, lon }) => {
+  }, [zoom]);
+
+  React.useEffect(() => {
+    console.count("flyto setup");
+    if (map.current) {
+      const center = [lng, lat];
+      map.current.flyTo({ center });
+      marker.current.setLngLat(center);
+    }
+  }, [lng, lat]);
+
+  React.useEffect(() => {
+    console.count("stop markers setup");
+
+    if (map.current) {
+      allMarkers.current = nearby.map(({ id, lat, lon }) => {
         const el = document.createElement("div");
         el.setAttribute("id", id);
-        return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(this.map);
+        return new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(map.current);
       });
-      this.props.callback();
+
+      callback(nearby);
+      const currentMarkers = allMarkers.current;
+
+      const cleanUp = () => currentMarkers.map((marker) => marker.remove());
+
+      return cleanUp;
     }
+  }, [nearby, callback]);
 
-    return null;
-  }
-
-  zoomTo = zoom => this.map.zoomTo(zoom, { duration: 1000 });
-
-  setCenter = center => {
-    this.map.flyTo({ center, zoom: this.props.zoom });
-    this.marker.setLngLat(center);
+  const style = {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: "100%",
+    zIndex: -10
   };
 
-  preventDefault = e => {
-    return e && e.preventDefault();
-  };
-
-  blockScrollToRefresh = () => {
-    return window.addEventListener("touchmove", this.preventDefault, {
-      passive: false
-    });
-  };
-
-  onDragEnd = () => {
-    const { lng, lat } = this.marker.getLngLat();
-    window.removeEventListener("touchmove", this.preventDefault, {
-      passive: false
-    });
-    return this.props.setCurrentPosition(lat, lng);
-  };
-
-  componentWillUnmount() {
-    this.map.remove();
-    this.marker.remove();
-    this.allMarkers.map(marker => marker.remove());
-  }
-
-  render() {
-    const style = {
-      position: "absolute",
-      top: 0,
-      bottom: 0,
-      width: "100%",
-      zIndex: -10
-    };
-
-    return <div style={style} ref={el => (this.mapContainer = el)} />;
-  }
+  return <div style={style} ref={mapContainer} />;
 }
 
 export default MapBox;

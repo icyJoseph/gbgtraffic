@@ -32,14 +32,20 @@ import {
 import MapBox from "components/MapBox";
 import { debounce } from "utils/debounce";
 
-function Landing({ fetchToken, fetchMapToken, flushMapToken, ...props }) {
-  const [loadMarkers, setLoadMarkers] = React.useState(false);
+function Landing({
+  fetchToken,
+  fetchMapToken,
+  flushMapToken,
+  nearby,
+  ...props
+}) {
+  const [nearbyMarkers, setNearbyMarkers] = React.useState([]);
 
   const debouncedFetchMapToken = debounce(fetchMapToken, 500);
   const debouncedFlush = debounce(flushMapToken, 500);
-  const toggleLoadMarkers = () => setLoadMarkers(true);
 
   React.useEffect(() => {
+    console.count("fetch vt token and map token");
     fetchToken();
     fetchMapToken();
   }, [fetchToken, fetchMapToken]);
@@ -51,32 +57,26 @@ function Landing({ fetchToken, fetchMapToken, flushMapToken, ...props }) {
           token={props.map_token}
           lat={props.lat}
           lng={props.lng}
-          nearby={props.nearby}
+          nearby={nearby}
           zoom={props.zoom}
-          callback={toggleLoadMarkers}
+          callback={setNearbyMarkers}
           fetching={props.fetching}
           setCurrentPosition={props.setCurrentPosition}
           fetchMapToken={debouncedFetchMapToken}
           flushMapToken={debouncedFlush}
         />
       )}
-      {loadMarkers &&
-        props.nearby
-          .filter(({ track }) => (props.zoom > 14 ? track : !track))
-          .map((stop) => (
-            <Marker
-              key={stop.id}
-              reference={props.nearby}
-              {...stop}
-              callback={props.openStopCard}
-            />
-          ))}
+      {nearbyMarkers
+        .filter(({ track }) => (props.zoom > 14 ? track : !track))
+        .map((stop) => (
+          <Marker key={stop.id} {...stop} callback={props.openStopCard} />
+        ))}
       {props.stopCardState && (
         <BoardContainer>
           <StyledPaperContainer elevation={3}>
             <Board
               current={props.currentStopId}
-              nearby={props.nearby}
+              nearby={nearby}
               departures={props.departures}
               arrivals={props.arrivals}
               fetch={props.fetchBoard}
@@ -141,4 +141,7 @@ const mapDispatchToProps = {
   setCurrentPosition
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Landing);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(Landing));
