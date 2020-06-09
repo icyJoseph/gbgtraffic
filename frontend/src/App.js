@@ -1,17 +1,19 @@
 import React, { Fragment } from "react";
 
-import Banner from "containers/Banner";
-import Bottom from "containers/Bottom";
-import Landing from "containers/Landing";
-import Header from "containers/Header";
-import Update from "containers/Update";
+import {
+  SuspenseBanner,
+  SuspenseBottom,
+  SuspenseLanding,
+  SuspenseHeader,
+  SuspenseUpdate
+} from "lazy";
 
 export const App = () => (
   <Fragment>
-    <Header />
-    <Banner />
-    <Landing />
-    <Bottom />
-    <Update />
+    <SuspenseHeader />
+    <SuspenseBanner />
+    <SuspenseLanding />
+    <SuspenseBottom />
+    <SuspenseUpdate />
   </Fragment>
 );
