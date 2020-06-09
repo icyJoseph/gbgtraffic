@@ -6,8 +6,8 @@ import {
   selectServerDate,
   selectServerTime,
   selectFetchingState
-} from "../../ducks/traffic";
-import { createSelector } from "../../functional";
+} from "ducks/traffic";
+import { createSelector } from "functional";
 
 const showDate = (time, date) =>
   time && date ? `Server time: ${time} - ${date}` : "Ready to start!";

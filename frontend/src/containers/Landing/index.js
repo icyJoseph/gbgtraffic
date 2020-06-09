@@ -1,21 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
-import Marker from "../../components/Marker";
-import Board from "../../components/Board";
-import {
-  BoardContainer,
-  StyledPaperContainer
-} from "../../components/Board/styled";
-import { createSelector } from "../../functional";
-import { fetchToken } from "../../ducks/auth";
+import Marker from "components/Marker";
+import Board from "components/Board";
+import { BoardContainer, StyledPaperContainer } from "components/Board/styled";
+import { createSelector } from "functional";
+import { fetchToken } from "ducks/auth";
 import {
   selectZoom,
   selectStopCardState,
   selectStopId,
   openStopCard,
   closeStopCard
-} from "../../ducks/map";
+} from "ducks/map";
 import {
   fetchMapToken,
   setCurrentPosition,
@@ -23,17 +20,17 @@ import {
   selectMapToken,
   selectMapTokenExpiry,
   flushMapToken
-} from "../../ducks/geoLocation";
+} from "ducks/geoLocation";
 import {
   selectNearbyStopsFetchingStatus,
   selectNearbyStopLocations,
   selectDepartureBoard,
   selectArrivalBoard,
   fetchBoard
-} from "../../ducks/traffic";
+} from "ducks/traffic";
 
-import MapBox from "../../components/MapBox";
-import { debounce } from "../../utils/debounce";
+import MapBox from "components/MapBox";
+import { debounce } from "utils/debounce";
 
 export class Landing extends Component {
   state = {
@@ -67,7 +64,7 @@ export class Landing extends Component {
         {this.state.loadMarkers &&
           this.props.nearby
             .filter(({ track }) => (this.props.zoom > 14 ? track : !track))
-            .map(stop => (
+            .map((stop) => (
               <Marker
                 key={stop.id}
                 reference={this.props.nearby}
@@ -149,7 +146,4 @@ const mapDispatchToProps = {
   setCurrentPosition
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Landing);
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);

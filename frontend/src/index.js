@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
-import Routes from "./routes";
+import { App } from "App";
 import "./index.css";
-import configureStore from "./ducks/config";
+import configureStore from "ducks/config";
 import { register } from "./serviceWorker";
 
 const storedState = localStorage.getItem("bus-app");
@@ -24,9 +24,10 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
-      <Routes />
+      <App />
     </Provider>
   </MuiThemeProvider>,
   document.getElementById("root")
 );
+
 register();

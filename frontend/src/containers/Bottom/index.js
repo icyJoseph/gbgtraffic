@@ -6,13 +6,13 @@ import LocationOff from "@material-ui/icons/LocationOff";
 import ZoomIn from "@material-ui/icons/ZoomIn";
 import ZoomOut from "@material-ui/icons/ZoomOut";
 
-import { createSelector } from "../../functional";
-import { getCurrentPosition, selectPermission } from "../../ducks/geoLocation";
-import { fetchNearbyStops } from "../../ducks/traffic";
-import { zoomIn, zoomOut } from "../../ducks/map";
+import { createSelector } from "functional";
+import { getCurrentPosition, selectPermission } from "ducks/geoLocation";
+import { fetchNearbyStops } from "ducks/traffic";
+import { zoomIn, zoomOut } from "ducks/map";
 
-import { StyledButton } from "../../components/styled/Buttons";
-import { Pinned } from "../../components/styled/Pinned";
+import { StyledButton } from "components/styled/Buttons";
+import { Pinned } from "components/styled/Pinned";
 
 export const Bottom = ({
   increaseZoom,
@@ -63,7 +63,7 @@ export const Bottom = ({
 );
 
 export default connect(
-  createSelector([selectPermission], permission => ({ permission })),
+  createSelector([selectPermission], (permission) => ({ permission })),
   {
     getPos: getCurrentPosition,
     getStopsNearby: fetchNearbyStops,
