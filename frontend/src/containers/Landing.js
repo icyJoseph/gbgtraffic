@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Marker from "components/Marker";
@@ -32,69 +32,64 @@ import {
 import MapBox from "components/MapBox";
 import { debounce } from "utils/debounce";
 
-export class Landing extends Component {
-  state = {
-    loadMarkers: false
-  };
+function Landing({ fetchToken, fetchMapToken, flushMapToken, ...props }) {
+  const [loadMarkers, setLoadMarkers] = React.useState(false);
 
-  debouncedFetchMapToken = debounce(this.props.fetchMapToken, 500);
-  debouncedFlush = debounce(this.props.flushMapToken, 500);
-  toggleLoadMarkers = () => this.setState({ loadMarkers: true });
-  componentDidMount() {
-    this.props.fetchToken();
-    this.props.fetchMapToken();
-  }
-  render() {
-    return (
-      <div>
-        {this.props.map_token && (
-          <MapBox
-            token={this.props.map_token}
-            lat={this.props.lat}
-            lng={this.props.lng}
-            nearby={this.props.nearby}
-            zoom={this.props.zoom}
-            callback={this.toggleLoadMarkers}
-            fetching={this.props.fetching}
-            setCurrentPosition={this.props.setCurrentPosition}
-            fetchMapToken={this.debouncedFetchMapToken}
-            flushMapToken={this.debouncedFlush}
-          />
-        )}
-        {this.state.loadMarkers &&
-          this.props.nearby
-            .filter(({ track }) => (this.props.zoom > 14 ? track : !track))
-            .map((stop) => (
-              <Marker
-                key={stop.id}
-                reference={this.props.nearby}
-                {...stop}
-                callback={this.props.openStopCard}
-              />
-            ))}
-        {this.props.stopCardState && (
-          <BoardContainer>
-            <StyledPaperContainer elevation={3}>
-              <Board
-                current={this.props.currentStopId}
-                nearby={this.props.nearby}
-                departures={this.props.departures}
-                arrivals={this.props.arrivals}
-                fetch={this.props.fetchBoard}
-                close={this.props.closeStopCard}
-              />
-              <Button
-                style={{ margin: "auto" }}
-                onClick={this.props.closeStopCard}
-              >
-                Close
-              </Button>
-            </StyledPaperContainer>
-          </BoardContainer>
-        )}
-      </div>
-    );
-  }
+  const debouncedFetchMapToken = debounce(fetchMapToken, 500);
+  const debouncedFlush = debounce(flushMapToken, 500);
+  const toggleLoadMarkers = () => setLoadMarkers(true);
+
+  React.useEffect(() => {
+    fetchToken();
+    fetchMapToken();
+  }, [fetchToken, fetchMapToken]);
+
+  return (
+    <div>
+      {props.map_token && (
+        <MapBox
+          token={props.map_token}
+          lat={props.lat}
+          lng={props.lng}
+          nearby={props.nearby}
+          zoom={props.zoom}
+          callback={toggleLoadMarkers}
+          fetching={props.fetching}
+          setCurrentPosition={props.setCurrentPosition}
+          fetchMapToken={debouncedFetchMapToken}
+          flushMapToken={debouncedFlush}
+        />
+      )}
+      {loadMarkers &&
+        props.nearby
+          .filter(({ track }) => (props.zoom > 14 ? track : !track))
+          .map((stop) => (
+            <Marker
+              key={stop.id}
+              reference={props.nearby}
+              {...stop}
+              callback={props.openStopCard}
+            />
+          ))}
+      {props.stopCardState && (
+        <BoardContainer>
+          <StyledPaperContainer elevation={3}>
+            <Board
+              current={props.currentStopId}
+              nearby={props.nearby}
+              departures={props.departures}
+              arrivals={props.arrivals}
+              fetch={props.fetchBoard}
+              close={props.closeStopCard}
+            />
+            <Button style={{ margin: "auto" }} onClick={props.closeStopCard}>
+              Close
+            </Button>
+          </StyledPaperContainer>
+        </BoardContainer>
+      )}
+    </div>
+  );
 }
 
 const mapStateToProps = createSelector(

@@ -1,56 +1,49 @@
-import React, { Component } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 
-class Update extends Component {
-  state = {
-    open: false,
-    vertical: "bottom",
-    horizontal: "center"
-  };
+function Update() {
+  const [open, setOpen] = React.useState(false);
 
-  componentDidMount() {
-    window.addEventListener("message", this.openSnackBar);
-  }
+  React.useEffect(() => {
+    const openSnackBar = (event) => {
+      const { data } = event;
+      if (data.type === "WORKER_UPDATE") {
+        return setOpen(true);
+      }
+      return null;
+    };
 
-  componentWillUnmount() {
-    window.removeEventListener("message", this.openSnackBar);
-  }
+    window.addEventListener("message", openSnackBar);
 
-  openSnackBar = event => {
-    const { data } = event;
-    if (data.type === "WORKER_UPDATE") {
-      return this.setState({ open: true });
-    }
-    return null;
-  };
+    return () => {
+      window.removeEventListener("message", openSnackBar);
+    };
+  }, []);
 
-  refreshPage = () =>
-    new Promise(resolve => resolve(localStorage.removeItem("bus-app"))).then(
-      () => window.location.reload()
-    );
+  const refreshPage = () =>
+    new Promise((resolve) =>
+      resolve(localStorage.removeItem("bus-app"))
+    ).then(() => window.location.reload());
 
-  render() {
-    const { vertical, horizontal, open } = this.state;
-    return (
-      <div>
-        <Snackbar
-          anchorOrigin={{ vertical, horizontal }}
-          open={open}
-          message={<span id="message-id">New version available!</span>}
-          action={
-            <Button
-              color="inherit"
-              style={{ color: "rgba(255,0,80)" }}
-              onClick={this.refreshPage}
-            >
-              Update
-            </Button>
-          }
-        />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={open}
+        message={<span id="message-id">New version available!</span>}
+        action={
+          <Button
+            color="inherit"
+            style={{ color: "rgba(255,0,80)" }}
+            onClick={refreshPage}
+          >
+            Update
+          </Button>
+        }
+      />
+    </div>
+  );
 }
 
 export default Update;
