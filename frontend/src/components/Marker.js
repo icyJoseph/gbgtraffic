@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import Paper from "@material-ui/core/Paper";
 
 import Typography from "@material-ui/core/Typography";
-import { curry } from "../../functional";
+import { curry } from "functional";
 
-import marker from "./marker.png";
+import marker from "assets/marker.png";
 
 export const Marker = ({ id, callback, track, reference, name }) => {
   const hook = document.getElementById(id);
@@ -25,7 +25,7 @@ export const Marker = ({ id, callback, track, reference, name }) => {
         <Typography variant="subheading" align="center" color="inherit">
           {track
             ? track
-            : reference.filter(ref => ref.name === name && ref.track).length}
+            : reference.filter((ref) => ref.name === name && ref.track).length}
         </Typography>
         <img src={marker} alt="Marker" style={{ width: "30px" }} />
       </Paper>,

@@ -1,9 +1,9 @@
 import React from "react";
-import { map, pipe } from "../../functional";
+import { map, pipe } from "functional";
 
-const split = str => str.split("");
-const toDec = str => parseInt(str, 16);
-const scale = val => val * Math.round(255 / 16);
+const split = (str) => str.split("");
+const toDec = (str) => parseInt(str, 16);
+const scale = (val) => val * Math.round(255 / 16);
 
 export const Pixel = ({ red, green, blue }) => (
   <div
@@ -23,8 +23,8 @@ export const Avatar = ({ id = "", expiry }) => {
   const joint = id.split("-").join("");
   const rawData = pipe(
     split,
-    arr => map(arr, toDec),
-    arr => map(arr, scale)
+    (arr) => map(arr, toDec),
+    (arr) => map(arr, scale)
   )(joint);
 
   const pixels = Array.from({ length: 16 }, (_, i) => rawData.slice(i, i + 3));

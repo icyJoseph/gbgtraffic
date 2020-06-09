@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Marker from "components/Marker";
 import Board from "components/Board";
-import { BoardContainer, StyledPaperContainer } from "components/Board/styled";
+import { BoardContainer, StyledPaperContainer } from "components/styled/Board";
 import { createSelector } from "functional";
 import { fetchToken } from "ducks/auth";
 import {

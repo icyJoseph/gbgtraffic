@@ -7,7 +7,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import { TableContainer } from "./styled";
+
+import { TableContainer } from "components/styled/Board";
+
 class Board extends Component {
   state = {
     value: 0
@@ -21,13 +23,13 @@ class Board extends Component {
     this.setState({ value });
   };
 
-  handleChangeIndex = index => {
+  handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
 
   render() {
     const { nearby, current } = this.props;
-    const stop = nearby.find(item => item.id === current);
+    const stop = nearby.find((item) => item.id === current);
     if (!stop) {
       return this.props.close() && null;
     }
@@ -64,8 +66,8 @@ class Board extends Component {
               <TableBody>
                 {this.props.departures
                   // .filter(trip => !track || trip.track === track)
-                  .filter(trip => !track || trip.track === track)
-                  .map(departure => {
+                  .filter((trip) => !track || trip.track === track)
+                  .map((departure) => {
                     return (
                       <TableRow key={departure.journeyid}>
                         <TableCell>{departure.name}</TableCell>
@@ -78,8 +80,8 @@ class Board extends Component {
             ) : (
               <TableBody>
                 {this.props.arrivals
-                  .filter(trip => trip.track === track)
-                  .map(arrival => {
+                  .filter((trip) => trip.track === track)
+                  .map((arrival) => {
                     return (
                       <TableRow key={arrival.journeyid}>
                         <TableCell>{arrival.name}</TableCell>
