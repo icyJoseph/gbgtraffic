@@ -7,7 +7,7 @@ import { curry } from "functional";
 
 import marker from "assets/marker.png";
 
-export const Marker = ({ id, callback, track, reference, name }) => {
+export const Marker = ({ id, callback, track, name }) => {
   const hook = document.getElementById(id);
   return (
     hook &&
@@ -23,15 +23,13 @@ export const Marker = ({ id, callback, track, reference, name }) => {
         }}
       >
         <Typography variant="subheading" align="center" color="inherit">
-          {track
-            ? track
-            : reference.filter((ref) => ref.name === name && ref.track).length}
+          {track ? track : "Grouped"}
         </Typography>
-        <img src={marker} alt="Marker" style={{ width: "30px" }} />
+        <img src={marker} alt={name} style={{ width: "30px" }} />
       </Paper>,
       hook
     )
   );
 };
 
-export default Marker;
+export default React.memo(Marker);
