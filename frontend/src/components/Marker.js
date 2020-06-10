@@ -32,4 +32,4 @@ export const Marker = ({ id, callback, track, name }) => {
   );
 };
 
-export default React.memo(Marker);
+export default Marker;
