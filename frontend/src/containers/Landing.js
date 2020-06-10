@@ -39,7 +39,7 @@ function Landing({
   nearby,
   ...props
 }) {
-  const [nearbyMarkers, setNearbyMarkers] = React.useState([]);
+  const [nearbyMarkers, setNearbyMarkers] = React.useReducer((_, x) => x, []);
 
   const debouncedFetchMapToken = debounce(fetchMapToken, 500);
   const debouncedFlush = debounce(flushMapToken, 500);
@@ -141,7 +141,4 @@ const mapDispatchToProps = {
   setCurrentPosition
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(React.memo(Landing));
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
